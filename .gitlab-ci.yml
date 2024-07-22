@@ -1,4 +1,6 @@
-image: ubuntu:22.04
+image: docker:20.10.15
+services:
+  - docker:20.10.15-dind
 
 stages:
   - build
@@ -15,9 +17,8 @@ variables:
   DEBIAN_FRONTEND: noninteractive
 
 before_script:
-  - dockerd &
-  - apt-get update -y
-  - apt-get install -y python3
+  - apk update
+  - apk add python3
 
 build-package:
   stage: build
