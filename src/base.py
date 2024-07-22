@@ -409,6 +409,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		scriptfile.write(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode())
 
 	scriptfile.flush()
+	os.fsync()
 
 	log_step("Compiling ...")
 	params = ['docker', 
