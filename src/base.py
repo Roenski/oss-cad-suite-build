@@ -428,6 +428,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		'yosyshq/cross-'+ arch + ':2.0',
 		'bash', scriptfile.name
 	]
+	log_step("Running " + str(params))
 	scriptfile.close()
 	return run_live(params, cwd=build_dir)
 
