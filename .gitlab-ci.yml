@@ -34,4 +34,4 @@ release-package:
   script:
     - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file _outputs/linux-x64/stripped/oss-cad-suite-linux-x64-a-core.tgz "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/oss-cad-suite-linux-x64-a-core.tgz'
   only:
-    - master
+    - main
