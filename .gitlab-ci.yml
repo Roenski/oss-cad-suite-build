@@ -1,4 +1,4 @@
-image: docker:20.10.15
+image: ubuntu:22.04
 services:
   - docker:20.10.15-dind
 
