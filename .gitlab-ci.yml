@@ -15,7 +15,7 @@ variables:
   DEBIAN_FRONTEND: noninteractive
 
 before_script:
-  - dockerd
+  - dockerd &
   - apt-get update -y
   - apt-get install -y python3
 
