@@ -4,8 +4,8 @@ stages:
   - build
   - release
 
-  services:
-    - docker:20.10.15-dind
+services:
+  - docker:20.10.15-dind
 
 variables:
   DOCKER_HOST: tcp://docker:2376
@@ -17,7 +17,6 @@ variables:
 before_script:
   - dockerd
   - apt-get update -y
-  - apt-get install -y python3
   - apt-get install -y python3
 
 build-package:
