@@ -18,7 +18,7 @@ variables:
 
 before_script:
   - apk update
-  - apk add --no-cache python3 py3-pip git
+  - apk add --no-cache python3 py3-pip git rsync
 
 build-package:
   stage: build
