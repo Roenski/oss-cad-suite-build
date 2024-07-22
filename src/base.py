@@ -459,7 +459,8 @@ def create_exe(exe_name, directory, cwd):
 def buildCode(build_target, build_arch, nproc, force, dry, pack_sources, single, tar):
 	log_info_triple("Building ", build_target, " for {} architecture ...".format(build_arch))
 
-	version_string = datetime.now().strftime("%Y%m%d")
+	#version_string = datetime.now().strftime("%Y%m%d")
+	version_string = "a-core"
 	build_order = createBuildOrder(build_target, build_arch, getArchitecture(), True)
 	pos = 0
 	if single:
