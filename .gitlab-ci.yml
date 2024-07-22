@@ -27,7 +27,7 @@ build-package:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - python3 -m pip install click
-    - python3 builder.py --target stripped
+    - ./builder.py --target stripped
   artifacts:
     when: always
     paths:
