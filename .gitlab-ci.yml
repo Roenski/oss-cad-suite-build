@@ -11,6 +11,7 @@ variables:
   DOCKER_TLS_CERTDIR: "/certs"
   CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+  DEBIAN_FRONTEND: noninteractive
 
 before_script:
   - apt-get update -y
