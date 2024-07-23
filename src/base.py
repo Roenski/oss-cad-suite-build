@@ -409,7 +409,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	else:
 		scriptfile.write(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode())
 
-	sh_scriptfile.write(f"apk add --no-cache bash\nbash {scriptfile.name}")
+	sh_scriptfile.write(f"apk add --no-cache bash\nbash {scriptfile.name}".encode())
 	sh_scriptfile.flush()
 	scriptfile.flush()
 
@@ -430,6 +430,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		'yosyshq/cross-'+ arch + ':2.0',
 		'sh', sh_scriptfile.name
 	]
+	log_step(f"Running {params}")
 	return run_live(params, cwd=build_dir)
 
 def create_tar(tar_name, directory, cwd):
