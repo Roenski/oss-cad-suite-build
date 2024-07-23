@@ -401,8 +401,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	if (target.preload):
 		env['PRELOAD'] = 'True'
 
-	sh_scriptfile = tempfile.NamedTemporaryFile()
-	scriptfile = tempfile.NamedTemporaryFile()
+	sh_scriptfile = tempfile.NamedTemporaryFile(delete=False)
+	scriptfile = tempfile.NamedTemporaryFile(delete=False)
 	scriptfile.write("set -e -x\n".encode())
 	if (not target.top_package):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
