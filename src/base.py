@@ -414,8 +414,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	params = ['docker', 
 		'run', '--rm',
 		'--user', '{}:{}'.format(os.getuid(), os.getgid()),
-		'-v', f'{scriptfile.name}:{scriptfile.name}',
-		'-v', '{}:/work'.format(cwd),
+		'-v', '/tmp:/tmp',
+		'-v', f'{os.getcwd()}:/work',
 		'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
 	]
 	for i, j in env.items():
@@ -433,7 +433,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 def create_tar(tar_name, directory, cwd):
 	params= [
 		'tar',
-		'--owner=root', '--group=root',
+		#'--owner=root', '--group=root',
 		'-czf', tar_name, directory
 	]
 	code = run_live(params, cwd=cwd)
