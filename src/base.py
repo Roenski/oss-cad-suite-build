@@ -401,6 +401,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	if (target.preload):
 		env['PRELOAD'] = 'True'
 
+	sh_scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
 	if (not target.top_package):
@@ -408,6 +409,8 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	else:
 		scriptfile.write(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode())
 
+	sh_scriptfile.write(f"apk add --no-cache bash\nbash {scriptfile.name}")
+	sh_scriptfile.flush()
 	scriptfile.flush()
 
 	log_step("Compiling ...")
@@ -425,7 +428,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
 		'yosyshq/cross-'+ arch + ':2.0',
-		'bash', scriptfile.name
+		'sh', sh_scriptfile.name
 	]
 	return run_live(params, cwd=build_dir)
 
