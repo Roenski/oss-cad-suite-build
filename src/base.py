@@ -401,7 +401,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	if (target.preload):
 		env['PRELOAD'] = 'True'
 
-	scriptfile = tempfile.NamedTemporaryFile(delete=False)
+	scriptfile = tempfile.NamedTemporaryFile(dir=os.getcwd())
 	scriptfile.write("set -e -x\n".encode())
 	if (not target.top_package):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
@@ -414,7 +414,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	params = ['docker', 
 		'run', '--rm',
 		'--user', '{}:{}'.format(os.getuid(), os.getgid()),
-		'-v', '/tmp:/tmp',
 		'-v', f'{os.getcwd()}:/work',
 		'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
 	]
@@ -425,7 +424,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
 		'yosyshq/cross-'+ arch + ':2.0',
-		'bash', scriptfile.name
+		'bash', os.path.join("/work", os.path.basename(scriptfile.name))
 	]
 	log_step(f"Running {params}")
 	return run_live(params, cwd=build_dir)
