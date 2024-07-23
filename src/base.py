@@ -401,7 +401,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	if (target.preload):
 		env['PRELOAD'] = 'True'
 
-	scriptfile = tempfile.NamedTemporaryFile(delete=False)
+	scriptfile = tempfile.NamedTemporaryFile()
 	scriptfile.write("set -e -x\n".encode())
 	if (not target.top_package):
 		scriptfile.write(open(os.path.join(target.group, SCRIPTS_ROOT, target.name + ".sh"), 'r').read().encode())
@@ -409,7 +409,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		scriptfile.write(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode())
 
 	scriptfile.flush()
-	os.fsync(scriptfile.fileno())
 
 	log_step("Compiling ...")
 	params = ['docker', 
@@ -428,8 +427,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 		'yosyshq/cross-'+ arch + ':2.0',
 		'bash', scriptfile.name
 	]
-	log_step("Running " + str(params))
-	scriptfile.close()
 	return run_live(params, cwd=build_dir)
 
 def create_tar(tar_name, directory, cwd):
