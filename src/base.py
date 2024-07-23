@@ -401,7 +401,6 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	if (target.preload):
 		env['PRELOAD'] = 'True'
 
-	sh_scriptfile = tempfile.NamedTemporaryFile(delete=False, suffix="_sh")
 	scriptfile = tempfile.NamedTemporaryFile(delete=False)
 	scriptfile.write("set -e -x\n".encode())
 	if (not target.top_package):
@@ -409,15 +408,13 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 	else:
 		scriptfile.write(open(os.path.join(SCRIPTS_ROOT, "package-" + arch.split('-')[0] + ".sh"), 'r').read().encode())
 
-	sh_scriptfile.write(f"apk add --no-cache bash\nbash {scriptfile.name}".encode())
-	sh_scriptfile.flush()
 	scriptfile.flush()
 
 	log_step("Compiling ...")
 	params = ['docker', 
 		'run', '--rm',
 		'--user', '{}:{}'.format(os.getuid(), os.getgid()),
-		'-v', '/tmp:/tmp',
+		'-v', f'{scriptfile.name}:{scriptfile.name}',
 		'-v', '{}:/work'.format(cwd),
 		'-w', os.path.join('/work', os.path.relpath(build_dir, os.getcwd())),
 	]
@@ -428,7 +425,7 @@ def executeBuild(target, arch, prefix, build_dir, output_dir, nproc, pack_source
 			params += ['-e', '{}={}'.format(i, j)]
 	params += [
 		'yosyshq/cross-'+ arch + ':2.0',
-		'sh', sh_scriptfile.name
+		'bash', scriptfile.name
 	]
 	log_step(f"Running {params}")
 	return run_live(params, cwd=build_dir)
